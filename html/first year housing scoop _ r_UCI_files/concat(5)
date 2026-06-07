@@ -1,1 +1,0 @@
-SML.di("./B-jbNAYzUF.js",import.meta.url,"B-jbNAYzUF"),SML.dm("D8_OpgaT18",["B-jbNAYzUF"],async()=>{var o;return function(o){o.Back="back",o.Close="close",o.GetApp="get_app",o.Login="login",o.NotOver18="im_not_over_18",o.Over18="continue",o.Signup="signup",o.DontShowAgain="dont_show",o.Report="report"}(o||(o={})),{get B(){return o}}});
