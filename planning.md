@@ -223,5 +223,14 @@ Verification: I will test the Gradio UI with an out-of-domain question (e.g., "W
 Pipeline implemented in `ingest.py`. All 10 Reddit HTML files were parsed, stripped of style/script blocks, cleaned of boilerplate (JS, CSS, UI chrome), and chunked with per-document `RecursiveCharacterTextSplitter` settings. Results: **76 total chunks** across 10 documents, average chunk length 719 chars (min 135, max 1200). Chunks persisted to `chunks.json` for Milestone 4. 5 representative chunks inspected manually — each contains a complete, self-contained student opinion with no HTML/JS artifacts.
 
 **Milestone 4 — Embedding and retrieval:**
+Pipeline implemented in `embed.py`. All 76 chunks embedded with `all-MiniLM-L6-v2` and persisted to a local ChromaDB collection (`uci-housing`). Retrieval function `retrieve(query, k=5)` returns top-k hits with text, source URL, description, chunk index, and cosine distance.
+
+Test retrieval results (3 of 5 evaluation queries):
+
+| Query | Quality | Notes |
+|-------|---------|-------|
+| "What do students say about the flooring in Plaza Verde?" | Partial | Rank 1 is the correct Plaza Verde thread (distance 0.65) but the specific laminate dust complaint lives deeper in that doc; ranks 2–5 drift to general ACC/Mesa topics. |
+| "Is Middle Earth better than Mesa Court for STEM students?" | Strong | All 5 results on-topic (distances 0.55–0.69); chunks directly name CompSci proximity and STEM stereotypes. |
+| "Does Vista del Campo cover utilities in rent?" | Weak | Distances are high (1.29–1.35); rank 3 contains the relevant sentence ("electricity and gas and water is included in rent") but the electricity cap nuance—key to the expected answer—does not appear in any retrieved chunk. Likely a retrieval failure case for the evaluation report. |
 
 **Milestone 5 — Generation and interface:**
