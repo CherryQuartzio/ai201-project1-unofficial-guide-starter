@@ -183,7 +183,7 @@ Verification: I will run the script and manually read through 2-3 of the output 
 
 Tool: Claude
 
-Input: My "Chunking Strategy" section specifying the Recursive Character Splitter with a chunk size of 1000 and an overlap of 150, along with a sample of the cleaned Reddit text.
+Input: My "Chunking Strategy" section specifying the Recursive Character Splitter with a chunk size of about 1000 and an overlap of about 150 (may vary between posts), along with a sample of the cleaned Reddit text.
 
 Expected Output: A Python function (chunk_text()) that utilizes a library like LangChain's RecursiveCharacterTextSplitter configured with my exact parameters.
 
@@ -220,6 +220,7 @@ Expected Output: An app.py file containing the Groq API call with a strict syste
 Verification: I will test the Gradio UI with an out-of-domain question (e.g., "What is the capital of France?"). The system passes verification if it outright refuses to answer. For in-domain questions, I will verify that every response includes a clear citation linking back to the specific Reddit thread it pulled the information from.
 
 **Milestone 3 — Ingestion and chunking:**
+Pipeline implemented in `ingest.py`. All 10 Reddit HTML files were parsed, stripped of style/script blocks, cleaned of boilerplate (JS, CSS, UI chrome), and chunked with per-document `RecursiveCharacterTextSplitter` settings. Results: **76 total chunks** across 10 documents, average chunk length 719 chars (min 135, max 1200). Chunks persisted to `chunks.json` for Milestone 4. 5 representative chunks inspected manually — each contains a complete, self-contained student opinion with no HTML/JS artifacts.
 
 **Milestone 4 — Embedding and retrieval:**
 

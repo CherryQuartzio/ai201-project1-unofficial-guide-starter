@@ -74,7 +74,7 @@ My domain will be about on-campus housing at the University of California, Irvin
 
 **Why these choices fit your documents:** The sources are primarily Reddit threads containing a user's initial questions followed by replies. They're very structured in nature, where you can split one big document containing the entire thread into smaller one separated into individual comments if needed.
 
-**Final chunk count:**
+**Final chunk count:** 76
 
 ---
 
@@ -86,7 +86,7 @@ My domain will be about on-campus housing at the University of California, Irvin
      Consider: context length limits, multilingual support, accuracy on domain-specific text,
      latency, and local vs. API-hosted. -->
 
-**Model used:**
+**Model used:** 
 
 **Production tradeoff reflection:**
 
