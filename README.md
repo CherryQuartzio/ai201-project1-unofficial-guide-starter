@@ -49,10 +49,30 @@ My domain will be about on-campus housing at the University of California, Irvin
      - What your final chunk count was across all documents -->
 
 **Chunk size:**
+- Document 1: ~1000 chars
+- Document 2: ~800 chars
+- Document 3: ~800 chars
+- Document 4: ~1000 chars
+- Document 5: ~1000 chars
+- Document 6: ~1000 chars
+- Document 7: ~1200 chars
+- Document 8: ~600 chars
+- Document 9: ~800 chars
+- Document 10: ~1000 chars
 
 **Overlap:**
+- Document 1: 150 overlap
+- Document 2: 100 overlap
+- Document 3: 100 overlap
+- Document 4: No strict overlap
+- Document 5: 150 overlap
+- Document 6: 150 overlap
+- Document 7: No strict overlap
+- Document 8: 100 overlap
+- Document 9: 100 overlap
+- Document 10: 150 overlap
 
-**Why these choices fit your documents:**
+**Why these choices fit your documents:** The sources are primarily Reddit threads containing a user's initial questions followed by replies. They're very structured in nature, where you can split one big document containing the entire thread into smaller one separated into individual comments if needed.
 
 **Final chunk count:**
 

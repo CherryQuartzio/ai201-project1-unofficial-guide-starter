@@ -45,32 +45,30 @@ My domain will be about on-campus housing at the University of California, Irvin
 I'm planning to do a recursive chunking strategy.
 
 **Chunk size:**
-     - 1: ~1000 chars
-     - 2: ~800 chars
-     - 3: ~800 chars
-     - 4: ~1000 chars
-     - 5: ~1000 chars
-     - 6: ~1000 chars
-     - 7: ~1200 chars
-     - 8: ~600 chars
-     - 9: ~800 chars
-     - 10: ~1000 chars
+- Document 1: ~1000 chars
+- Document 2: ~800 chars
+- Document 3: ~800 chars
+- Document 4: ~1000 chars
+- Document 5: ~1000 chars
+- Document 6: ~1000 chars
+- Document 7: ~1200 chars
+- Document 8: ~600 chars
+- Document 9: ~800 chars
+- Document 10: ~1000 chars
 
 **Overlap:**
-     - 1: 150 overlap
-     - 2: 100 overlap
-     - 3: 100 overlap
-     - 4: No strict overlap
-     - 5: 150 overlap
-     - 6: 150 overlap
-     - 7: No strict overlap
-     - 8: 100 overlap
-     - 9: 100 overlap
-     - 10: 150 overlap
+- Document 1: 150 overlap
+- Document 2: 100 overlap
+- Document 3: 100 overlap
+- Document 4: No strict overlap
+- Document 5: 150 overlap
+- Document 6: 150 overlap
+- Document 7: No strict overlap
+- Document 8: 100 overlap
+- Document 9: 100 overlap
+- Document 10: 150 overlap
 
-**Reasoning:**
-
-My sources are primarily Reddit threads containing a user's initial questions followed by replies. They're very structured in nature, where you can split one big document containing the entire thread into smaller one separated into individual comments if needed.
+**Reasoning:** My sources are primarily Reddit threads containing a user's initial questions followed by replies. They're very structured in nature, where you can split one big document containing the entire thread into smaller one separated into individual comments if needed.
 
 ---
 
@@ -126,20 +124,6 @@ My sources are primarily Reddit threads containing a user's initial questions fo
      You can use ASCII art, a Mermaid diagram, or embed a sketch as an image.
      You'll use this diagram as context when prompting AI tools to implement each stage. -->
 
----
-
-## AI Tool Plan
-
-<!-- For each part of the pipeline below, describe:
-     - Which AI tool you plan to use (Claude, Copilot, ChatGPT, etc.)
-     - What you'll give it as input (which sections of this planning.md, which requirements)
-     - What you expect it to produce
-     - How you'll verify the output matches your spec
-
-     "I'll use AI to help me code" is not a plan.
-     "I'll give Claude my Chunking Strategy section and ask it to implement chunk_text()
-     with my specified chunk size and overlap" is a plan. -->
-
 [ Raw UCI Reddit Threads ]
           |
           v
@@ -170,6 +154,70 @@ My sources are primarily Reddit threads containing a user's initial questions fo
           |
           v
 [ Grounded, Cited UI Answer ]
+
+---
+
+## AI Tool Plan
+
+<!-- For each part of the pipeline below, describe:
+     - Which AI tool you plan to use (Claude, Copilot, ChatGPT, etc.)
+     - What you'll give it as input (which sections of this planning.md, which requirements)
+     - What you expect it to produce
+     - How you'll verify the output matches your spec
+
+     "I'll use AI to help me code" is not a plan.
+     "I'll give Claude my Chunking Strategy section and ask it to implement chunk_text()
+     with my specified chunk size and overlap" is a plan. -->
+
+1. Document Ingestion & Cleaning
+
+Tool: Claude
+
+Input: The "Documents" section (containing the 10 Reddit URLs) and the instruction to extract only the substantive review/comment text while stripping away Reddit's UI boilerplate, HTML tags, and navigation elements.
+
+Expected Output: A Python script (ingest.py) that fetches the URLs, cleans the text, and saves each thread as a cleanly formatted .txt file.
+
+Verification: I will run the script and manually read through 2-3 of the output text files to ensure no HTML artifacts (&amp;, <div>) or irrelevant sidebar text remain.
+
+2. Chunking
+
+Tool: Claude
+
+Input: My "Chunking Strategy" section specifying the Recursive Character Splitter with a chunk size of 1000 and an overlap of 150, along with a sample of the cleaned Reddit text.
+
+Expected Output: A Python function (chunk_text()) that utilizes a library like LangChain's RecursiveCharacterTextSplitter configured with my exact parameters.
+
+Verification: I will print 5 random chunks to the console. I will read each one to ensure it captures a complete, standalone thought (like a full review of Plaza Verde) and isn't slicing sentences in half.
+
+3. Embedding & Vector Store
+
+Tool: Claude
+
+Input: The "Retrieval Approach" section and the pipeline architecture diagram. I will explicitly instruct it to use sentence-transformers (all-MiniLM-L6-v2) and initialize a local ChromaDB collection.
+
+Expected Output: A script that iterates through my chunked texts, embeds them, and inserts them into ChromaDB, ensuring that the source URL or filename is attached as metadata.
+
+Verification: I will write a quick print statement to check the total item count in the ChromaDB collection and verify it matches the total number of chunks produced in the previous step.
+
+4. Retrieval
+
+Tool: Claude
+
+Input: The "Retrieval Approach" section specifying a Top-K of 5, and the 5 specific test questions from my "Evaluation Plan".
+
+Expected Output: A retrieve(query) function that queries the ChromaDB collection and returns the top 5 chunks along with their distance/similarity scores and metadata.
+
+Verification: I will pass 3 of my test questions into the function. I will manually read the returned chunks to ensure they are actually on-topic (e.g., querying about VDC parking actually returns chunks about VDC parking) and check that the distance scores indicate a strong match.
+
+5. Generation & Interface
+
+Tool: Claude
+
+Input: The "Grounded Response Generation" requirements, the instruction to use the Groq API (llama-3.3-70b-versatile), and the requirement for a basic Gradio web interface. I will explicitly emphasize that the LLM prompt must strictly enforce grounding and source citation.
+
+Expected Output: An app.py file containing the Groq API call with a strict system prompt, wired up to a Gradio interface with input/output text boxes and a separate box displaying the cited sources.
+
+Verification: I will test the Gradio UI with an out-of-domain question (e.g., "What is the capital of France?"). The system passes verification if it outright refuses to answer. For in-domain questions, I will verify that every response includes a clear citation linking back to the specific Reddit thread it pulled the information from.
 
 **Milestone 3 — Ingestion and chunking:**
 
