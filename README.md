@@ -86,9 +86,9 @@ My domain will be about on-campus housing at the University of California, Irvin
      Consider: context length limits, multilingual support, accuracy on domain-specific text,
      latency, and local vs. API-hosted. -->
 
-**Model used:** 
+**Model used:** all-MiniLM-L6-v2
 
-**Production tradeoff reflection:**
+**Production tradeoff reflection:** When scaling this to real users, latency and context window limits become major constraints. However, I would heavily weigh these against strict data privacy requirements. While commercial APIs offer massive context windows and multilingual support, sending sensitive student data or internal campus documents to third parties carries risks. To ensure zero data retention (ZDR), I would strongly consider deploying more robust open-weight embedding models locally. If falling back to commercial APIs for speed, verifying their ZDR policies would be a mandatory tradeoff against the performance benefits they provide.
 
 ---
 
@@ -102,8 +102,15 @@ My domain will be about on-campus housing at the University of California, Irvin
      the mechanism. -->
 
 **System prompt grounding instruction:**
+The system enforces grounding through explicit instructions in the LLM's system prompt:
+> "Answer the user's question using ONLY the context passages provided below.
+> - Do not use any outside knowledge or general facts not present in the context.
+> - If the answer cannot be found in the provided context, respond with exactly: 'I don't have information about that in my documents.'"
+
+These instructions establish a strict boundary, preventing hallucinations by explicitly instructing the model how to behave when the context lacks the answer. The context chunks themselves are formatted clearly with `[Passage N]` markers, followed by their thread metadata and chunk text, creating a structured context block for the LLM to read.
 
 **How source attribution is surfaced in the response:**
+Source attribution is handled structurally rather than relying purely on the LLM. The system's retrieval function returns the `metadata` for each chunk, which contains the original Reddit thread URL and a descriptive title. The `format_sources()` function deduplicates these sources across the Top-K retrieved chunks and formats them as a bulleted list. The Gradio UI surfaces this list in a dedicated, read-only "Retrieved sources" textbox adjacent to the answer, ensuring the user can always see exactly which documents fed the generation.
 
 ---
 
@@ -115,14 +122,14 @@ My domain will be about on-campus housing at the University of California, Irvin
 
 | # | Question | Expected answer | System response (summarized) | Retrieval quality | Response accuracy |
 |---|----------|-----------------|------------------------------|-------------------|-------------------|
-| 1 | | | | | |
-| 2 | | | | | |
-| 3 | | | | | |
-| 4 | | | | | |
-| 5 | | | | | |
+| 1 | What are the common student complaints about the flooring in Plaza Verde? | Students frequently mention that the laminate flooring in Plaza Verde produces a lot of dust and makes the apartments feel dirty very quickly. | The floor is always dusty despite cleaning, and sometimes feels sticky due to glue seeping from the laminate. | Relevant | Accurate |
+| 2 | For an incoming freshman, what are the perceived benefits of choosing Middle Earth over Mesa Court? | Middle Earth is generally stereotyped as being closer to the engineering/STEM buildings and having a quieter environment. | Closer to engineering/CS buildings, better dining commons food, and quieter. | Relevant | Accurate |
+| 3 | Are utilities fully covered in the rent at Vista del Campo (VDC)? | VDC covers utilities but places a cap on electricity usage; extra charges are split among roommates. | Electricity, gas, and water are included in the rent (missed the cap detail). | Partially relevant | Partially accurate |
+| 4 | Which ACC community is generally considered better for parking: Camino del Sol or Vista del Campo Norte (VDCN)? | VDCN is widely considered better for parking because it has its own dedicated, adjacent parking structure. | VDCN is generally considered better for parking compared to other ACC communities. | Relevant | Accurate |
+| 5 | What is a major downside of living on the first floor in Plaza Verde according to Reddit reviews? | First-floor residents often report safety concerns due to people walking directly outside their windows, and bugs. | The system stated there is no specific mention of a major downside and that the comments section was empty. | Off-target | Inaccurate |
 
-**Retrieval quality:** Relevant / Partially relevant / Off-target  
-**Response accuracy:** Accurate / Partially accurate / Inaccurate
+**Retrieval quality ratings:** Relevant / Partially relevant / Off-target  
+**Response accuracy ratings:** Accurate / Partially accurate / Inaccurate
 
 ---
 
@@ -139,13 +146,13 @@ My domain will be about on-campus housing at the University of California, Irvin
      "The embedding model treated the professor's nickname as out-of-vocabulary and returned
      results from an unrelated review" is an explanation. -->
 
-**Question that failed:**
+**Question that failed:** What is a major downside of living on the first floor in Plaza Verde according to Reddit reviews?
 
-**What the system returned:**
+**What the system returned:** The system stated there is no specific mention of a major downside of living on the first floor in Plaza Verde, and claimed the comments section in the retrieved context was empty.
 
-**Root cause (tied to a specific pipeline stage):**
+**Root cause (tied to a specific pipeline stage):** The failure occurred during the **retrieval** stage due to limitations in the **chunking strategy**. The semantic search successfully retrieved the chunk containing the original Reddit post (where the user asks about first-floor issues) because its text heavily matched the query. However, the comments that actually answered the question were located in separate chunks further down the document. Because `top_k=5` was filled with other general Plaza Verde chunks and the original post chunk, the specific chunks with the actual answers (mentioning bugs and safety concerns) were pushed out of the retrieval window. The LLM accurately summarized the retrieved context, which was just the question prompt without the helpful replies.
 
-**What you would change to fix it:**
+**What you would change to fix it:** Implement a parent-child chunking strategy or metadata filtering. By indexing chunks hierarchically, retrieving a post's main question would automatically pull in the top comments associated with it, ensuring the answer context travels with the question context during retrieval.
 
 ---
 
@@ -154,9 +161,9 @@ My domain will be about on-campus housing at the University of California, Irvin
 <!-- Reflect on how planning.md shaped your implementation.
      Answer both questions with at least 2–3 sentences each. -->
 
-**One way the spec helped you during implementation:**
+**One way the spec helped you during implementation:** Forcing the chunking strategy and retrieval plan to be defined upfront in `planning.md` made writing `ingest.py` straightforward. Knowing the exact chunk size and overlap beforehand prevented unnecessary trial-and-error during the implementation phase.
 
-**One way your implementation diverged from the spec, and why:**
+**One way your implementation diverged from the spec, and why:** We originally planned to just use standard text extraction, but we had to diverge and add a specific `preprocess_html()` step to aggressively strip `<script>` and `<style>` tags. This was necessary because Reddit's dynamic loading and browser extensions injected massive amounts of CSS/JS boilerplate into the chunks, which would have ruined the embedding and retrieval process.
 
 ---
 
@@ -173,12 +180,12 @@ My domain will be about on-campus housing at the University of California, Irvin
 
 **Instance 1**
 
-- *What I gave the AI:*
-- *What it produced:*
-- *What I changed or overrode:*
+- *What I gave the AI: Given the chunking strategy and all the raw HTMLs, I asked Claude to filter out unecessary detail and keep only clean text files for use as documents*
+- *What it produced: An ingest.py file that doesn't filter out all junk from the txt*
+- *What I changed or overrode: Amend the file to filter out dangling CSS blocks*
 
 **Instance 2**
 
-- *What I gave the AI:*
-- *What it produced:*
-- *What I changed or overrode:*
+- *What I gave the AI: Ask it to give me a chunking strategy for each of the 10 documents*
+- *What it produced: A mix of chunking strategies for each of the documents despite all of them are in the same format in general*
+- *What I changed or overrode: Consolidate all documents to use the recursive chunking strategy*
