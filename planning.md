@@ -234,3 +234,10 @@ Test retrieval results (3 of 5 evaluation queries):
 | "Does Vista del Campo cover utilities in rent?" | Weak | Distances are high (1.29–1.35); rank 3 contains the relevant sentence ("electricity and gas and water is included in rent") but the electricity cap nuance—key to the expected answer—does not appear in any retrieved chunk. Likely a retrieval failure case for the evaluation report. |
 
 **Milestone 5 — Generation and interface:**
+Pipeline implemented in `app.py`. Groq (`llama-3.3-70b-versatile`) with a strict grounding system prompt — model is instructed to answer only from retrieved context and refuse otherwise. Source attribution is appended to every answer. Gradio UI has three components: question input, answer box, and retrieved sources box. End-to-end tests:
+
+| Test | Query | Result |
+|------|-------|--------|
+| In-scope / strong retrieval | "What do students say about Middle Earth being better for CS majors?" | Accurate, grounded answer with two source URLs cited |
+| In-scope / weak retrieval | "Does Vista del Campo put a cap on electricity usage?" | Refused ("I don't have information about that in my documents") — the electricity cap detail is absent from retrieved chunks; documented as failure case |
+| Out-of-scope | "What is the capital of France?" | Correctly refused — grounding enforcement works |
