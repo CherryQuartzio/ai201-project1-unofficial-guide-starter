@@ -14,6 +14,8 @@
      Example: "Student reviews of CS professors at [university] — useful because official
      course descriptions don't reflect teaching style, exam difficulty, or workload." -->
 
+My domain will be about on-campus housing at the University of California, Irvine. There are many community available for students who wish to stay on-campus, but knowing everything through official means can be difficult. Informations like floor plan, living experiences, amendities are best answered by students who had the chance to be there, where such thoughts are usually scattered across many different channels.
+
 ---
 
 ## Document Sources
@@ -24,16 +26,16 @@
 
 | # | Source | Type | URL or file path |
 |---|--------|------|-----------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
-| 6 | | | |
-| 7 | | | |
-| 8 | | | |
-| 9 | | | |
-| 10 | | | |
+| 1 | r/UCI - first year housing scoop | Reddit thread | https://www.reddit.com/r/UCI/comments/1jckpkn/first_year_housing_scoop/ |
+| 2 | r/UCI - Honest opinions about living in plaza verde? | Reddit thread | https://www.reddit.com/r/UCI/comments/x4b6hb/honest_opinions_about_living_in_plaza_verde/ |
+| 3 | r/UCI - ACC question - comment your experiences in VDC/Plaza! | Reddit thread | https://www.reddit.com/r/UCI/comments/10js4cg/acc_question_comment_your_experiences_in_vdcplaza/ |
+| 4 | r/UCI - Are the Acc apartments really that bad? | Reddit thread | https://www.reddit.com/r/UCI/comments/14wks9z/are_the_acc_apartments_really_that_bad/ |
+| 5 | r/UCI - Middle Earth or Mesa Court | Reddit thread | https://www.reddit.com/r/UCI/comments/1ss7sgp/middle_earth_or_mesa_court/ |
+| 6 | r/UCI - Mesa Court vs Middle Earth | Reddit thread | https://www.reddit.com/r/UCI/comments/1sdqj6j/mesa_court_vs_middle_earth/ |
+| 7 | r/UCI - Any opinions on ACC housing? | Reddit thread | https://www.reddit.com/r/UCI/comments/mo4ice/any_opinions_on_acc_housing/ |
+| 8 | r/UCI - Middle Earth or Mesa Court???? | Reddit thread | https://www.reddit.com/r/UCI/comments/31e68h/middle_earth_or_mesa_court/ |
+| 9 | r/UCI - 25+ Transfer looking at housing | Reddit thread | https://www.reddit.com/r/UCI/comments/1t04ih1/25_transfer_looking_at_housing/ |
+| 10 | r/UCI - how do i choose housing options | Reddit thread | https://www.reddit.com/r/UCI/comments/1rz6gkj/how_do_i_choose_housing_options/ |
 
 ---
 

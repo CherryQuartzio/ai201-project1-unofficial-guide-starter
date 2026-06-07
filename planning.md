@@ -11,6 +11,8 @@
 
 <!-- What domain did you choose? Why is this knowledge valuable and hard to find through official channels? -->
 
+My domain will be about on-campus housing at the University of California, Irvine. There are many community available for students who wish to stay on-campus, but knowing everything through official means can be difficult. Informations like floor plan, living experiences, amendities are best answered by students who had the chance to be there, where such thoughts are usually scattered across many different channels.
+
 ---
 
 ## Documents
@@ -20,16 +22,16 @@
 
 | # | Source | Description | URL or location |
 |---|--------|-------------|-----------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
-| 6 | | | |
-| 7 | | | |
-| 8 | | | |
-| 9 | | | |
-| 10 | | | |
+| 1 | r/UCI - first year housing scoop | A highly detailed breakdown comparing the pros and cons of Mesa Court vs. Middle Earth, specifically distinguishing between the "Towers" and "Classics" layouts. | https://www.reddit.com/r/UCI/comments/1jckpkn/first_year_housing_scoop/ |
+| 2 | r/UCI - Honest opinions about living in plaza verde? | Specific, honest student opinions on Plaza Verde, including details on room layouts, dust issues with the laminate flooring, and safety concerns about living on the first floor. | https://www.reddit.com/r/UCI/comments/x4b6hb/honest_opinions_about_living_in_plaza_verde/ |
+| 3 | r/UCI - ACC question - comment your experiences in VDC/Plaza! | A deep dive comparing Vista del Campo (VDC) and Plaza Verde, focusing on room space, utility bills, internet reliability, and parking convenience. | https://www.reddit.com/r/UCI/comments/10js4cg/acc_question_comment_your_experiences_in_vdcplaza/ |
+| 4 | r/UCI - Are the Acc apartments really that bad? | A thread addressing rumors about ACC apartments, with firsthand accounts of maintenance responsiveness, internet outages, and mold issues on the first floor at VDCN. | https://www.reddit.com/r/UCI/comments/14wks9z/are_the_acc_apartments_really_that_bad/ |
+| 5 | r/UCI - Middle Earth or Mesa Court | A recent comparison of the two freshman housing communities, discussing which is better for engineering majors, social life, and the differences in the dining halls (Anteatery vs. Brandywine).| https://www.reddit.com/r/UCI/comments/1ss7sgp/middle_earth_or_mesa_court/ |
+| 6 | r/UCI - Mesa Court vs Middle Earth | Insights from a Psychology major evaluating whether the longer walk from Mesa Court to the Social Sciences buildings is worth the potentially better social environment and newer facilities. | https://www.reddit.com/r/UCI/comments/1sdqj6j/mesa_court_vs_middle_earth/ |
+| 7 | r/UCI - Any opinions on ACC housing? | A comprehensive thread covering the general feel of various ACC communities, comparing the modern feel of Camino del Sol to the parking advantages at VDCN. | https://www.reddit.com/r/UCI/comments/mo4ice/any_opinions_on_acc_housing/ |
+| 8 | r/UCI - Middle Earth or Mesa Court???? | A classic debate thread analyzing the stereotypes of both freshman dorms (e.g., Mesa Court being more party-oriented and Middle Earth being more studious and STEM-focused). | https://www.reddit.com/r/UCI/comments/31e68h/middle_earth_or_mesa_court/ |
+| 9 | r/UCI - 25+ Transfer looking at housing | Perspectives on housing for transfer and older students, comparing the community feel of ACC apartments to the subsidized cost and quieter environment of Graduate and Family housing. | https://www.reddit.com/r/UCI/comments/1t04ih1/25_transfer_looking_at_housing/ |
+| 10 | r/UCI - how do i choose housing options | A Q&A thread helping incoming freshmen navigate housing applications, specifically discussing how to ensure placement in on-campus residence halls like Mesa Towers. | https://www.reddit.com/r/UCI/comments/1rz6gkj/how_do_i_choose_housing_options/ |
 
 ---
 
@@ -40,11 +42,35 @@
      numbers fit the structure of your documents.
      A review-heavy corpus warrants different chunking than a long FAQ. -->
 
+I'm planning to do a recursive chunking strategy.
+
 **Chunk size:**
+     - 1: ~1000 chars
+     - 2: ~800 chars
+     - 3: ~800 chars
+     - 4: ~1000 chars
+     - 5: ~1000 chars
+     - 6: ~1000 chars
+     - 7: ~1200 chars
+     - 8: ~600 chars
+     - 9: ~800 chars
+     - 10: ~1000 chars
 
 **Overlap:**
+     - 1: 150 overlap
+     - 2: 100 overlap
+     - 3: 100 overlap
+     - 4: No strict overlap
+     - 5: 150 overlap
+     - 6: 150 overlap
+     - 7: No strict overlap
+     - 8: 100 overlap
+     - 9: 100 overlap
+     - 10: 150 overlap
 
 **Reasoning:**
+
+My sources are primarily Reddit threads containing a user's initial questions followed by replies. They're very structured in nature, where you can split one big document containing the entire thread into smaller one separated into individual comments if needed.
 
 ---
 
@@ -56,11 +82,11 @@
      would you weigh in choosing a different embedding model — context length, multilingual
      support, accuracy on domain-specific text, latency? -->
 
-**Embedding model:**
+**Embedding model:** all-MiniLM-L6-v2
 
-**Top-k:**
+**Top-k:** 5 chunks per query
 
-**Production tradeoff reflection:**
+**Production tradeoff reflection:** When scaling this to real users, latency and context window limits become major constraints. However, I would heavily weigh these against strict data privacy requirements. While commercial APIs offer massive context windows and multilingual support, sending sensitive student data or internal campus documents to third parties carries risks. To ensure zero data retention (ZDR), I would strongly consider deploying more robust open-weight embedding models locally—perhaps provisioning a cloud server with dedicated hardware like an RTX 3080. If falling back to commercial APIs for speed, verifying their ZDR policies would be a mandatory tradeoff against the performance benefits they provide.
 
 ---
 
@@ -73,11 +99,11 @@
 
 | # | Question | Expected answer |
 |---|----------|-----------------|
-| 1 | | |
-| 2 | | |
-| 3 | | |
-| 4 | | |
-| 5 | | |
+| 1 | What are the common student complaints about the flooring in Plaza Verde? | Students frequently mention that the laminate flooring in Plaza Verde produces a lot of dust and makes the apartments feel dirty very quickly. |
+| 2 | For an incoming freshman, what are the perceived benefits of choosing Middle Earth over Mesa Court? | Middle Earth is generally stereotyped as being closer to the engineering/STEM buildings and having a quieter, more studious environment compared to Mesa Court. |
+| 3 | Are utilities fully covered in the rent at Vista del Campo (VDC)? | VDC covers utilities but places a cap on electricity usage; if an apartment goes over that cap, the extra charges are split among the roommates. |
+| 4 | Which ACC community is generally considered better for parking: Camino del Sol or Vista del Campo Norte (VDCN)? | VDCN is widely considered better for parking because it has its own dedicated, adjacent parking structure, whereas Camino residents often have to walk further. |
+| 5 | What is a major downside of living on the first floor in Plaza Verde according to Reddit reviews? | First-floor residents often report safety concerns due to people walking directly outside their windows, as well as an increased likelihood of encountering bugs. |
 
 ---
 
@@ -87,9 +113,8 @@
      Consider: noisy or inconsistent documents, missing source attribution, off-topic
      retrieval, chunks that split key information across boundaries. -->
 
-1.
-
-2.
+1. Reddit Jargon and Acronyms: The UCI subreddit is heavily reliant on abbreviations (e.g., PV, VDC, VDCN, ACC, ME, MC). If the user queries "Vista del Campo Norte" but the retrieved chunks only contain "VDCN", semantic search might miss the most relevant reviews unless the embedding model inherently understands that relationship.
+2. Splitting Multi-Topic Narratives: Students often write massive, comprehensive reviews covering parking, Wi-Fi, roommates, and laundry in a single post. Even with overlap, chunking might slice this narrative in half. If a query asks about both laundry and parking at Camino del Sol, the retrieval might only grab the chunk containing the laundry info, leading to an incomplete generated answer.
 
 ---
 
@@ -114,6 +139,37 @@
      "I'll use AI to help me code" is not a plan.
      "I'll give Claude my Chunking Strategy section and ask it to implement chunk_text()
      with my specified chunk size and overlap" is a plan. -->
+
+[ Raw UCI Reddit Threads ]
+          |
+          v
++----------------------------+
+|   1. Document Ingestion    |  (Text extraction & cleaning)
++----------------------------+
+          |
+          v
++----------------------------+
+|        2. Chunking         |  (Recursive Character Splitter)
++----------------------------+
+          |
+          v
++----------------------------+
+|   3. Embedding & Vector    |  (sentence-transformers:
+|          Store             |   all-MiniLM-L6-v2 + ChromaDB)
++----------------------------+
+          |
+          v
++----------------------------+
+|        4. Retrieval        |  (Top-K Semantic Search)
++----------------------------+
+          |
+          v
++----------------------------+
+|        5. Generation       |  (Groq: llama-3.3-70b-versatile)
++----------------------------+
+          |
+          v
+[ Grounded, Cited UI Answer ]
 
 **Milestone 3 — Ingestion and chunking:**
 
